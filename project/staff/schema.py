@@ -1,3 +1,4 @@
+from datetime import datetime
 import graphene
 from graphene_django.types import DjangoObjectType
 from .models import Staff
@@ -78,14 +79,13 @@ class UpdateMutation(graphene.Mutation):
 class UpdateFireDateMutation(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
-        fireDate = graphene.Date(required=True)
 
     staff = graphene.Field(StaffType)
 
     @classmethod
-    def mutate(cls, root, info, fireDate, id):
+    def mutate(cls, root, info, id):
         staff = Staff.objects.get(id=id)
-        staff.fireDate = fireDate
+        staff.fireDate = datetime.now()
 
         staff.save()
         return UpdateMutation(staff=staff)
